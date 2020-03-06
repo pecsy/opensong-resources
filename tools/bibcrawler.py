@@ -14,7 +14,8 @@ from zefania import exportToZefaniaXML
 
 base_url = 'http://abibliamindenkie.hu/'
 
-def loadDOM(session, url):
+
+def load_dom(session, url):
     response = session.get(url)
     if response.status_code == 200:
         print('Loaded {0} successfully'.format(url))
@@ -25,14 +26,16 @@ def loadDOM(session, url):
     dom = html.fromstring(response.content)
     return dom
 
+
 def getNodeText(node):
     text = node.xpath('text()')
     text = map(lambda s: s.strip(), text)
     text = filter(lambda s: len(s)>0,text)
     return " ".join(text)
 
+
 def parseChapter(session, chapter):
-    dom = loadDOM(session, chapter.url)
+    dom = load_dom(session, chapter.url)
     vnodes = dom.xpath('//p[@id]')
     vnodes = filter(lambda n: re.match("v[0-9]+",n.get("id")),vnodes)
     verses = map(getNodeText, vnodes )
@@ -43,13 +46,13 @@ def parseChapter(session, chapter):
 
 
 def parseBook(session, book):
-    dom = loadDOM(session, book.url)
+    dom = load_dom(session, book.url)
     urls = dom.xpath('//div[@class="book-content"]//a/@href')
     summaries = dom.xpath('//div[@class="book-content"]//span[@class="chapter-title-list"]')
     for i in range(0, len(urls)):
         si = summaries[i]
         summary = si.xpath('span/text()')
-        chapter  = model.Chapter(base_url+urls[i],summary)
+        chapter = model.Chapter(base_url+urls[i],summary)
         book.addChapter(chapter)
 
     for c in book.chapters:
@@ -59,7 +62,7 @@ def parseBook(session, book):
 
 
 def parseBible(session, url):
-    tree = loadDOM(session, url)
+    tree = load_dom(session, url)
     titles = tree.xpath('//div[@class="edition-content"]//a[@href]/text()')
     urls = tree.xpath('//div[@class="edition-content"]//a/@href')
     bible = model.Bible(u'Magyar Revideált Új fordítás', url)  # type: Bible
