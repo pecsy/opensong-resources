@@ -25,7 +25,7 @@ from xml.etree.ElementTree import Element
 class Song:
 
     def __init__(self, index, title, url):
-        self.title = title
+        self.title = str(index)+'. '+title
         self.author = ''
         self.copyright = ''
         self.hymn_number = index
@@ -43,6 +43,7 @@ class Song:
         self.time_sig = ''
         self.lyrics = []
         self.url = url
+        self.index = index
 
     def add_verse(self, index, lines):
         self.lyrics.append(Verse(index,lines))

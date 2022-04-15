@@ -5,7 +5,7 @@ from lxml import html
 import requests
 from xml.etree.ElementTree import tostring
 from songmodel import Song
-
+import singleversesongs
 
 base_url = 'https://enekeskonyv.reformatus.hu'
 
@@ -60,6 +60,11 @@ def load_song(session, s):
     # /html/body/main/article/div/section[1]/div/div/h3
 
     verses = dom.xpath('//div[@class=\"block__content\"]//ol/li')
+    if len(verses)<1:
+        print('{}. {} is empty'.format(s.index, s.title))
+        s.add_verse(1, singleversesongs.song[s.index])
+        return s
+
     for index in range(len(verses)):
         vtext = verses[index].xpath('.//text()')
         lines = []
@@ -79,8 +84,8 @@ def load_songs(session, songs):
 
 def save_songs_to_file(songs, target_dir):
     for s in songs:
-        fn = '{}/{}. {}'.format(target_dir,s.hymn_number,s.title)
-        saveToFile(fn,tostring(s.to_xml(),"unicode"))
+        fn = '{}/{}'.format(target_dir, s.title)
+        saveToFile(fn, tostring(s.to_xml(), "unicode"))
         print(fn)
 
 
@@ -90,9 +95,7 @@ if __name__ == '__main__':
 
     session = requests.Session()
     songs = load_song_list(session, base_url);
-    
+
     load_songs(session, songs)
 
-
     save_songs_to_file(songs, 'songs')
-    
