@@ -330,7 +330,7 @@ songs = {
     ],
     610: [
         'Menj el a te nyugalmadba, :/:'
-        'Boldog lélek, követünk;,
+        'Boldog lélek, követünk;',
         'Hogy a kívánt nyugalomba’ :/:',
         'Részt vehessünk, sietünk.',
         'Készíts, Uram, e jóra, :/:',

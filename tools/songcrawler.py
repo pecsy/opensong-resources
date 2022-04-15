@@ -62,7 +62,7 @@ def load_song(session, s):
     verses = dom.xpath('//div[@class=\"block__content\"]//ol/li')
     if len(verses)<1:
         print('{}. {} is empty'.format(s.index, s.title))
-        s.add_verse(1, singleversesongs.song[s.index])
+        s.add_verse(1, singleversesongs.songs[s.index])
         return s
 
     for index in range(len(verses)):
